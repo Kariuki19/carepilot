@@ -14,14 +14,13 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
 export const fetchNairobiFacilities = async (userLat, userLon, filterType) => {
   try {
     // API endpoint for KMHFR v2 facilities
-    // FORCED PRODUCTION OVERRIDE
-    const url = 'https://carepilot-backend-4dkn.onrender.com/api/facilities';
+    // FORCED PRODUCTION OVERRIDE - Using 'let' to allow dynamic filtering
+    let url = 'https://carepilot-backend-4dkn.onrender.com/api/facilities';
 
     // Add query parameter if filtering for pharmacies
     if (filterType === 'Pharmacy') {
       url += '?type=pharmacy';
     }
-
     const response = await fetch(url);
 
     if (!response.ok) {

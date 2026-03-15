@@ -41,20 +41,20 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
   const [userLocation, setUserLocation] = useState(fallbackLocation || { latitude: -1.2921, longitude: 36.8219 });
   const [facilities, setFacilities] = useState([]);
   const [selectedFacility, setSelectedFacility] = useState(null);
-  
+
   // Fetch real facilities via KMHFL API with local backup
   useEffect(() => {
     let mounted = true;
     fetchNairobiFacilities(userLocation.latitude, userLocation.longitude, filterType).then(data => {
-      if(mounted) {
+      if (mounted) {
         // Enforce the 30-item minimum threshold requested
         if (data.length < 30) {
-            console.warn(`Only ${data.length} facilities fetched. Padding Map with top 50 local fallbacks.`);
-            // Combine remote data with local list, deduplicating IDs roughly
-            const localDataToAppend = fallbackFacilities.filter(fb => !data.some(d => d.id === fb.id));
-            setFacilities([...data, ...localDataToAppend]);
+          console.warn(`Only ${data.length} facilities fetched. Padding Map with top 50 local fallbacks.`);
+          // Combine remote data with local list, deduplicating IDs roughly
+          const localDataToAppend = fallbackFacilities.filter(fb => !data.some(d => d.id === fb.id));
+          setFacilities([...data, ...localDataToAppend]);
         } else {
-            setFacilities(data);
+          setFacilities(data);
         }
       }
     });
@@ -86,9 +86,9 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
   // Filter logic based on urgency
   const filteredFacilities = useMemo(() => {
     if (!facilities) return [];
-    
+
     const isHighUrgency = urgencyLevel?.toLowerCase() === 'high';
-    
+
     // In fullScreen mode we don't care about urgencyLevel, we want general density.
     // kmhfl.js already sorts by distance if we pass userLocation.
     const eligibleFacilities = facilities.filter(facility => {
@@ -101,7 +101,7 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
       if (!fullScreen && isHighUrgency) {
         return facility.type === 'Hospital' && facility.isEmergencyReady;
       } else {
-        return true; 
+        return true;
       }
     });
 
@@ -118,119 +118,118 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
         <div className="bg-slate-50 border border-slate-200 text-slate-800 p-5 rounded-t-3xl shadow-sm">
           <h3 className="text-xl font-bold flex items-center text-teal-800">
             <svg className="w-6 h-6 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             {urgencyLevel?.toLowerCase() === 'high' ? 'Nearby Emergency Centers' : 'Nearby Validated Facilities'}
           </h3>
           <p className="text-slate-500 text-sm mt-1 font-medium">Verified by Kenya Master Health Facility List (KMHFL).</p>
         </div>
       )}
-      
+
       {/* Map Container */}
       <div className={`w-full relative bg-slate-100 flex flex-col ${fullScreen ? 'h-[calc(100vh-80px)] rounded-3xl' : 'h-[500px] rounded-b-3xl'} border border-slate-200 shadow-lg overflow-hidden`}>
-          <Map
-            mapId="DEMO_MAP_ID"
-            defaultCenter={mapCenter}
-            center={mapCenter} // this binds the map to center on the blue dot when geolocation resolves
-            defaultZoom={13}
-            mapTypeId={'hybrid'}
-            gestureHandling={'greedy'} // Enables free scrolling/panning without cooperative gestures
-            disableDefaultUI={false}
-            styles={medicalMapStyle}
-            zoomControl={true}
-            restriction={{
-              latLngBounds: NAIROBI_BOUNDS,
-              strictBounds: true,
-            }}
-          >
-            {/* Pharmacy Filter UI Overlay */}
-            {fullScreen && (
-              <div className="absolute top-4 left-4 z-50 flex gap-2">
-                <button 
-                  onClick={() => setFilterType(filterType === 'Pharmacy' ? 'All' : 'Pharmacy')}
-                  className={`px-4 py-2 rounded-full shadow-lg font-bold text-sm transition-all flex items-center ${filterType === 'Pharmacy' ? 'bg-blue-600 text-white border-2 border-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
-                >
-                  <span className="mr-2 text-lg">💊</span> 
-                  {filterType === 'Pharmacy' ? 'Pharmacies Only' : 'Find Pharmacy'}
-                </button>
-              </div>
-            )}
+        <Map
+          mapId="DEMO_MAP_ID"
+          defaultCenter={mapCenter}
+          center={mapCenter} // this binds the map to center on the blue dot when geolocation resolves
+          defaultZoom={13}
+          mapTypeId={'hybrid'}
+          gestureHandling={'greedy'} // Enables free scrolling/panning without cooperative gestures
+          disableDefaultUI={false}
+          styles={medicalMapStyle}
+          zoomControl={true}
+          restriction={{
+            latLngBounds: NAIROBI_BOUNDS,
+            strictBounds: true,
+          }}
+        >
+          {/* Pharmacy Filter UI Overlay */}
+          {fullScreen && (
+            <div className="absolute top-4 left-4 z-50 flex gap-2">
+              <button
+                onClick={() => setFilterType(filterType === 'Pharmacy' ? 'All' : 'Pharmacy')}
+                className={`px-4 py-2 rounded-full shadow-lg font-bold text-sm transition-all flex items-center ${filterType === 'Pharmacy' ? 'bg-blue-600 text-white border-2 border-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
+              >
+                <span className="mr-2 text-lg">💊</span>
+                {filterType === 'Pharmacy' ? 'Pharmacies Only' : 'Find Pharmacy'}
+              </button>
+            </div>
+          )}
 
-            {/* User Location Marker - Blue Pulsing */}
-            {userLocation && (
-              <AdvancedMarker position={mapCenter} zIndex={50}>
-                <div className="cursor-pointer relative flex flex-col items-center justify-center w-12 h-12" title="You are here">
-                  <div className="absolute w-8 h-8 bg-blue-500 rounded-full animate-ping opacity-70"></div>
-                  <div className="relative w-5 h-5 bg-blue-600 border-[3px] border-white rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
-                  <span className="absolute top-full mt-1 bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap">You are here</span>
+          {/* User Location Marker - Blue Pulsing */}
+          {userLocation && (
+            <AdvancedMarker position={mapCenter} zIndex={50}>
+              <div className="cursor-pointer relative flex flex-col items-center justify-center w-12 h-12" title="You are here">
+                <div className="absolute w-8 h-8 bg-blue-500 rounded-full animate-ping opacity-70"></div>
+                <div className="relative w-5 h-5 bg-blue-600 border-[3px] border-white rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
+                <span className="absolute top-full mt-1 bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow whitespace-nowrap">You are here</span>
+              </div>
+            </AdvancedMarker>
+          )}
+
+          {/* Facility Markers */}
+          {filteredFacilities.map(f => {
+            const position = { lat: f.coordinates.latitude, lng: f.coordinates.longitude };
+            // ensure we have valid coordinates
+            if (isNaN(position.lat) || isNaN(position.lng)) return null;
+
+            return (
+              <AdvancedMarker
+                key={f.id}
+                position={position}
+                onClick={() => setSelectedFacility(f)}
+              >
+                <div
+                  className="cursor-pointer group relative flex flex-col items-center hover:-translate-y-2 transition-transform duration-200"
+                  title={f.name}
+                >
+                  <div className="text-4xl filter drop-shadow-md">
+                    {f.type === 'Hospital' ? '🏥' : f.type === 'Medical Centre' ? '🏨' : f.type === 'Pharmacy' ? '💊' : '🩺'}
+                  </div>
                 </div>
               </AdvancedMarker>
-            )}
+            );
+          })}
 
-            {/* Facility Markers */}
-            {filteredFacilities.map(f => {
-              const position = { lat: f.coordinates.latitude, lng: f.coordinates.longitude };
-              // ensure we have valid coordinates
-              if (isNaN(position.lat) || isNaN(position.lng)) return null;
-              
-              return (
-                <AdvancedMarker 
-                  key={f.id} 
-                  position={position}
-                  onClick={() => setSelectedFacility(f)}
-                >
-                  <div 
-                    className="cursor-pointer group relative flex flex-col items-center hover:-translate-y-2 transition-transform duration-200"
-                    title={f.name}
-                  >
-                    <div className="text-4xl filter drop-shadow-md">
-                       {f.type === 'Hospital' ? '🏥' : f.type === 'Medical Centre' ? '🏨' : f.type === 'Pharmacy' ? '💊' : '🩺'}
-                    </div>
+          {/* Interactive InfoWindow */}
+          {selectedFacility && (
+            <InfoWindow
+              position={{ lat: selectedFacility.coordinates.latitude, lng: selectedFacility.coordinates.longitude }}
+              onCloseClick={() => setSelectedFacility(null)}
+              pixelOffset={[0, -40]}
+            >
+              <div className="p-3 max-w-[280px] font-['Outfit'] text-slate-800">
+                <h4 className="font-extrabold text-slate-900 text-lg mb-1 leading-tight">{selectedFacility.name}</h4>
+                <p className="text-sm text-slate-600 mb-3">{selectedFacility.address}</p>
+
+                <div className="flex flex-col gap-2">
+                  <div className="inline-flex items-center px-3 py-1.5 bg-slate-50 rounded-lg text-xs font-bold text-slate-700 border border-slate-200 shadow-sm">
+                    <span className="mr-1.5">🏷️</span> {selectedFacility.kephLevel || 'KMHFL Verified'}
                   </div>
-                </AdvancedMarker>
-              );
-            })}
 
-            {/* Interactive InfoWindow */}
-            {selectedFacility && (
-              <InfoWindow
-                position={{ lat: selectedFacility.coordinates.latitude, lng: selectedFacility.coordinates.longitude }}
-                onCloseClick={() => setSelectedFacility(null)}
-                pixelOffset={[0, -40]}
-              >
-                <div className="p-3 max-w-[280px] font-['Outfit'] text-slate-800">
-                  <h4 className="font-extrabold text-slate-900 text-lg mb-1 leading-tight">{selectedFacility.name}</h4>
-                  <p className="text-sm text-slate-600 mb-3">{selectedFacility.address}</p>
-                  
-                  <div className="flex flex-col gap-2">
-                    <div className="inline-flex items-center px-3 py-1.5 bg-slate-50 rounded-lg text-xs font-bold text-slate-700 border border-slate-200 shadow-sm">
-                      <span className="mr-1.5">🏷️</span> {selectedFacility.kephLevel || 'KMHFL Verified'}
-                    </div>
-
-                    <div className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm ${
-                      selectedFacility.isEmergencyReady 
-                        ? 'bg-red-50 text-red-700 border border-red-200' 
-                        : 'bg-teal-50 text-teal-700 border border-teal-200'
+                  <div className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm ${selectedFacility.isEmergencyReady
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-teal-50 text-teal-700 border border-teal-200'
                     }`}>
-                      <span className="mr-1.5">{selectedFacility.isEmergencyReady ? '🚨' : '✅'}</span>
-                      {selectedFacility.isEmergencyReady ? 'Emergency Ready' : 'Standard Care Facility'}
-                    </div>
-
-                    {/* Pharmacy Call Action Placeholder */}
-                    {selectedFacility.type === 'Pharmacy' && (
-                      <button 
-                        onClick={() => alert(`Initiating secure call to ${selectedFacility.name} at +254 700 000 000...`)}
-                        className="mt-2 w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow transition flex items-center justify-center"
-                      >
-                        <span className="mr-2">📞</span> Call Pharmacy
-                      </button>
-                    )}
+                    <span className="mr-1.5">{selectedFacility.isEmergencyReady ? '🚨' : '✅'}</span>
+                    {selectedFacility.isEmergencyReady ? 'Emergency Ready' : 'Standard Care Facility'}
                   </div>
+
+                  {/* Pharmacy Call Action Placeholder */}
+                  {selectedFacility.type === 'Pharmacy' && (
+                    <button
+                      onClick={() => alert(`Initiating secure call to ${selectedFacility.name} at +254 700 000 000...`)}
+                      className="mt-2 w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow transition flex items-center justify-center"
+                    >
+                      <span className="mr-2">📞</span> Call Pharmacy
+                    </button>
+                  )}
                 </div>
-              </InfoWindow>
-            )}
-          </Map>
+              </div>
+            </InfoWindow>
+          )}
+        </Map>
       </div>
 
       {/* Facility Cards Grid */}
@@ -244,23 +243,22 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
                   <div className="text-4xl">
                     {facility.type === 'Hospital' ? '🏥' : facility.type === 'Medical Centre' ? '🏨' : facility.type === 'Pharmacy' ? '💊' : '🩺'}
                   </div>
-                  {facility.distance !== null && (
-                     <div className="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full border border-slate-200">
-                       {facility.distance.toFixed(1)} km
-                     </div>
+                  {facility.distance !== null && facility.distance !== undefined && (
+                    <div className="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full border border-slate-200">
+                      {Number(facility.distance).toFixed(1)} km
+                    </div>
                   )}
                 </div>
-                
+
                 <h3 className="font-extrabold text-slate-900 text-lg leading-tight mb-2">{facility.name}</h3>
                 <p className="text-sm text-slate-500 mb-4">{facility.address}</p>
-                
+
                 <div className="flex flex-wrap gap-2 mb-4">
                   <span className="inline-flex items-center px-2.5 py-1 bg-slate-50 rounded-lg text-xs font-bold text-slate-700 border border-slate-200">
                     🏷️ {facility.kephLevel || 'Verified'}
                   </span>
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold ${
-                    facility.isEmergencyReady ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-teal-50 text-teal-700 border border-teal-200'
-                  }`}>
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold ${facility.isEmergencyReady ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-teal-50 text-teal-700 border border-teal-200'
+                    }`}>
                     {facility.isEmergencyReady ? '🚨 Emergency' : '✅ Standard Care'}
                   </span>
                   {facility.type === 'Pharmacy' && (
@@ -272,14 +270,14 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
               </div>
 
               {facility.type === 'Pharmacy' ? (
-                <button 
+                <button
                   onClick={() => alert(`Initiating secure call to ${facility.name} at +254 700 000 000...`)}
                   className="w-full mt-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-sm transition flex items-center justify-center text-sm"
                 >
                   <span className="mr-2">📞</span> Call Pharmacy
                 </button>
               ) : (
-                <button 
+                <button
                   onClick={() => {
                     setSelectedFacility(facility);
                     if (map) {
@@ -289,16 +287,16 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
                   }}
                   className="w-full mt-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl shadow-sm transition flex items-center justify-center text-sm border border-slate-200"
                 >
-                   View on Map
+                  View on Map
                 </button>
               )}
             </div>
           ))}
 
           {filteredFacilities.length === 0 && (
-             <div className="col-span-full py-12 text-center text-slate-500 font-medium">
-                No verified facilities found matching your criteria nearby.
-             </div>
+            <div className="col-span-full py-12 text-center text-slate-500 font-medium">
+              No verified facilities found matching your criteria nearby.
+            </div>
           )}
         </div>
       </div>
