@@ -83,7 +83,7 @@ export const fetchNairobiFacilities = async (userLat, userLon, filterType) => {
       {
         id: 'fb1',
         name: "AAR Medical Centre - Fallback",
-        type: "Medical Centre",
+        type: "Hospital",
         coordinates: { latitude: -1.2833, longitude: 36.8167 },
         address: "CBD, Nairobi",
         isEmergencyReady: false,

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Map, AdvancedMarker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
+import { Map, AdvancedMarker, InfoWindow, useMap, Pin } from '@vis.gl/react-google-maps';
 import { fetchNairobiFacilities } from '../api/kmhfl';
 import { fallbackFacilities } from '../data/facilities';
 
@@ -179,15 +179,14 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
                 key={f.id}
                 position={position}
                 onClick={() => setSelectedFacility(f)}
+                title={f.name}
               >
-                <div
-                  className="cursor-pointer group relative flex flex-col items-center hover:-translate-y-2 transition-transform duration-200"
-                  title={f.name}
-                >
-                  <div className="text-4xl filter drop-shadow-md">
-                    {f.type === 'Hospital' ? '🏥' : f.type === 'Medical Centre' ? '🏨' : f.type === 'Pharmacy' ? '💊' : '🩺'}
-                  </div>
-                </div>
+                <Pin 
+                  background={f.type === 'Hospital' ? '#ef4444' : f.type === 'Pharmacy' ? '#3b82f6' : '#9ca3af'}
+                  borderColor={'#ffffff'}
+                  glyphColor={'#ffffff'}
+                  glyph={f.type === 'Hospital' ? 'H' : f.type === 'Pharmacy' ? 'P' : 'C'}
+                />
               </AdvancedMarker>
             );
           })}
@@ -237,13 +236,13 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
         <h2 className="text-2xl font-extrabold text-slate-800 mb-6">Nearby Health Centers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredFacilities.map((facility) => (
-            <div key={facility.id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
+            <div key={facility.id} className="bg-white/70 backdrop-blur-md rounded-3xl p-6 border border-white/50 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">
               <div>
                 <div className="flex justify-between items-start mb-3">
-                  <div className="text-4xl">
-                    {facility.type === 'Hospital' ? '🏥' : facility.type === 'Medical Centre' ? '🏨' : facility.type === 'Pharmacy' ? '💊' : '🩺'}
+                  <div className="text-4xl font-extrabold text-slate-700">
+                    {facility.type === 'Hospital' ? 'H' : facility.type === 'Pharmacy' ? 'P' : 'C'}
                   </div>
-                  {facility.distance !== null && facility.distance !== undefined && (
+                  {typeof facility.distance === 'number' && !isNaN(facility.distance) && (
                     <div className="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full border border-slate-200">
                       {Number(facility.distance).toFixed(1)} km
                     </div>

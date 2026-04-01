@@ -1,36 +1,58 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Home, MapPin, Calendar, Compass } from 'lucide-react';
 
 const Header = () => {
     const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
+    const location = useLocation();
+
+    // Check if the current route matches the nav link
+    const isActive = (path) => {
+        if (path === '/') return location.pathname === '/';
+        return location.pathname.startsWith(path);
+    };
 
     return (
-        <header className="bg-white shadow">
-            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                <Link to="/" className="text-3xl font-bold text-teal-900 hover:text-teal-700 transition">CarePilot</Link>
-                <nav>
-                    <ul className="flex space-x-4 md:space-x-6 text-slate-600 font-medium items-center">
-                        <li>
-                            <Link to="/map?type=pharmacy" className="hidden sm:flex px-5 py-2.5 bg-blue-100 text-blue-800 rounded-xl hover:bg-blue-200 shadow-sm font-bold transition items-center">
-                                <span className="mr-2 text-xl">💊</span>Find Pharmacy
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/map" className="px-5 py-2.5 bg-teal-600 text-white rounded-xl hover:bg-teal-700 shadow-sm font-bold transition">
-                                Find Care
-                            </Link>
-                        </li>
-                        <li>
-                            <button 
-                                onClick={() => setIsEmergencyOpen(true)}
-                                className="px-5 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 shadow-md font-bold transition flex items-center animate-pulse hover:animate-none border border-red-500"
-                            >
-                                <span className="mr-2">🚨</span>Emergency
-                            </button>
-                        </li>
-                    </ul>
+        <header className="fixed top-0 left-0 w-full z-[1000] bg-white/70 backdrop-blur-xl border-b border-slate-200/50 shadow-sm transition-all duration-300">
+            <div className="max-w-7xl mx-auto h-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                
+                {/* Left: Logo */}
+                <div className="w-48">
+                    <Link to="/" className="text-3xl font-extrabold text-teal-900 tracking-tight hover:text-teal-700 transition">CarePilot</Link>
+                </div>
+
+                {/* Center: Navigation Menu */}
+                <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center h-full space-x-10">
+                    <Link to="/" className={`flex items-center space-x-2 text-[15px] font-semibold transition-colors h-full border-b-[3px] ${isActive('/') ? 'text-red-600 border-red-600' : 'text-slate-600 border-transparent hover:text-slate-900 hover:border-slate-300'}`}>
+                        <Home size={18} strokeWidth={1.5} />
+                        <span>Home</span>
+                    </Link>
+                    <Link to="/bookings" className={`flex items-center space-x-2 text-[15px] font-semibold transition-colors h-full border-b-[3px] ${isActive('/bookings') ? 'text-red-600 border-red-600' : 'text-slate-600 border-transparent hover:text-slate-900 hover:border-slate-300'}`}>
+                        <Calendar size={18} strokeWidth={1.5} />
+                        <span>Bookings</span>
+                    </Link>
+                    <Link to="/explore" className={`flex items-center space-x-2 text-[15px] font-semibold transition-colors h-full border-b-[3px] ${isActive('/explore') ? 'text-red-600 border-red-600' : 'text-slate-600 border-transparent hover:text-slate-900 hover:border-slate-300'}`}>
+                        <Compass size={18} strokeWidth={1.5} />
+                        <span>Health Hub</span>
+                    </Link>
                 </nav>
+
+                {/* Right: Action Buttons */}
+                <div className="flex space-x-3 items-center justify-end w-auto lg:w-96">
+                    <Link to="/map?type=pharmacy" className="hidden lg:flex px-4 py-2.5 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 shadow-sm font-bold transition items-center text-sm border border-blue-200">
+                        <span className="mr-1.5 text-lg">💊</span>Pharmacy
+                    </Link>
+                    <Link to="/map" className="px-4 py-2.5 bg-teal-600 text-white rounded-xl hover:bg-teal-700 shadow-sm font-bold transition text-sm">
+                        Find Care
+                    </Link>
+                    <button 
+                        onClick={() => setIsEmergencyOpen(true)}
+                        className="px-4 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 shadow-md font-bold transition flex items-center animate-pulse hover:animate-none border border-red-500 text-sm"
+                    >
+                        <span className="mr-1.5">🚨</span>Emergency
+                    </button>
+                </div>
             </div>
 
             {/* Emergency Contacts Drawer Modal */}
