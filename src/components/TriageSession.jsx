@@ -13,7 +13,10 @@ const TriageSession = () => {
 
   // Auto-scroll to the bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Only scroll if there are actually multiple messages, otherwise the initial AI greeting scrolls to bottom on mount
+    if (messages.length > 1 || isLoading || triageConclusion) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages, isLoading, triageConclusion]);
 
   const handleSendMessage = async (e) => {

@@ -265,6 +265,9 @@ const CareMap = ({ urgencyLevel, userLocation: fallbackLocation, fullScreen = fa
                       💊 Pharmacy On-site
                     </span>
                   )}
+                  <span className="inline-flex items-center px-2.5 py-1 bg-green-50 text-green-700 rounded-lg text-xs font-bold border border-green-200">
+                    🟢 Open Now
+                  </span>
                 </div>
               </div>
 

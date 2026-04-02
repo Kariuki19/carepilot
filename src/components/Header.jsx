@@ -73,7 +73,8 @@ const Header = () => {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-3xl shadow-2xl z-[101] overflow-hidden border border-slate-100"
+                            className="fixed w-full max-w-lg bg-white rounded-3xl shadow-2xl z-[9999] border border-slate-100"
+                            style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
                         >
                             <div className="bg-red-600 p-6 flex justify-between items-center text-white">
                                 <h3 className="text-2xl font-extrabold flex items-center">
@@ -91,7 +92,7 @@ const Header = () => {
                                 <p className="text-slate-600 font-medium mb-6">Nairobi rapid response directory. Tap any number to call immediately.</p>
                                 
                                 <div className="space-y-4">
-                                    <a href="tel:1199" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-all group">
+                                    <a href="tel:1199" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-all group shadow-sm hover:shadow-md cursor-pointer">
                                         <div className="flex items-center">
                                             <span className="text-3xl mr-4">🚑</span>
                                             <div>
@@ -99,10 +100,13 @@ const Header = () => {
                                                 <p className="text-slate-500 font-semibold group-hover:text-red-600 uppercase text-xs tracking-wider">Medical Rescue</p>
                                             </div>
                                         </div>
-                                        <div className="font-black text-xl text-slate-800 group-hover:text-red-700">1199</div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-black text-xl text-slate-800 group-hover:text-red-700 underline decoration-red-200 underline-offset-4 group-hover:decoration-red-400 pb-0.5">1199</span>
+                                            <span className="text-red-600 opacity-60 group-hover:opacity-100 transition-opacity">📞</span>
+                                        </div>
                                     </a>
 
-                                    <a href="tel:999" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-all group">
+                                    <a href="tel:999" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-all group shadow-sm hover:shadow-md cursor-pointer">
                                         <div className="flex items-center">
                                             <span className="text-3xl mr-4">🚨</span>
                                             <div>
@@ -110,10 +114,13 @@ const Header = () => {
                                                 <p className="text-slate-500 font-semibold group-hover:text-red-600 uppercase text-xs tracking-wider">Medical Rescue</p>
                                             </div>
                                         </div>
-                                        <div className="font-black text-xl text-slate-800 group-hover:text-red-700">999</div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-black text-xl text-slate-800 group-hover:text-red-700 underline decoration-red-200 underline-offset-4 group-hover:decoration-red-400 pb-0.5">999</span>
+                                            <span className="text-red-600 opacity-60 group-hover:opacity-100 transition-opacity">📞</span>
+                                        </div>
                                     </a>
 
-                                    <a href="tel:+254722178177" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 hover:bg-teal-50 transition-all group">
+                                    <a href="tel:+254722178177" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 hover:bg-teal-50 transition-all group shadow-sm hover:shadow-md cursor-pointer">
                                         <div className="flex items-center">
                                             <span className="text-3xl mr-4">🧠</span>
                                             <div>
@@ -121,10 +128,13 @@ const Header = () => {
                                                 <p className="text-slate-500 font-semibold group-hover:text-teal-700 uppercase text-xs tracking-wider">Befrienders Kenya</p>
                                             </div>
                                         </div>
-                                        <div className="font-black text-lg text-slate-800 group-hover:text-teal-800">+254 722 178 177</div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-black text-lg text-slate-800 group-hover:text-teal-800 underline decoration-teal-200 underline-offset-4 group-hover:decoration-teal-400 pb-0.5">+254 722 178 177</span>
+                                            <span className="text-teal-600 opacity-60 group-hover:opacity-100 transition-opacity">📞</span>
+                                        </div>
                                     </a>
 
-                                    <a href="tel:0202222181" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 transition-all group">
+                                    <a href="tel:0202222181" className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700 transition-all group shadow-sm hover:shadow-md cursor-pointer">
                                         <div className="flex items-center">
                                             <span className="text-3xl mr-4">🚒</span>
                                             <div>
@@ -132,7 +142,10 @@ const Header = () => {
                                                 <p className="text-slate-500 font-semibold group-hover:text-orange-600 uppercase text-xs tracking-wider">Fire Dept</p>
                                             </div>
                                         </div>
-                                        <div className="font-black text-lg text-slate-800 group-hover:text-orange-700">020 2222181</div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-black text-lg text-slate-800 group-hover:text-orange-700 underline decoration-orange-200 underline-offset-4 group-hover:decoration-orange-400 pb-0.5">020 2222181</span>
+                                            <span className="text-orange-600 opacity-60 group-hover:opacity-100 transition-opacity">📞</span>
+                                        </div>
                                     </a>
                                 </div>
                             </div>

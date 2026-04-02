@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import Header from './components/Header';
@@ -10,6 +10,10 @@ import CareMap from './components/CareMap';
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyPlaceholderForDemoPurposesOnly';
 
 function App() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <APIProvider apiKey={GOOGLE_MAPS_API_KEY}>
     <Router>
@@ -25,6 +29,14 @@ function App() {
           <Routes>
             <Route path="/" element={
               <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 px-4 w-full flex-grow">
+                {/* Personalized Hero Greeting */}
+                <div className="mb-8 p-8 bg-white/60 backdrop-blur-lg border border-white/40 rounded-3xl shadow-sm text-center md:text-left flex flex-col md:flex-row items-center justify-between">
+                  <div>
+                    <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">How are you feeling today?</h1>
+                    <p className="text-slate-500 mt-2 font-medium text-lg">We are here to help you find the right care.</p>
+                  </div>
+                </div>
+
                 <TriageSession />
               </div>
             } />
@@ -41,10 +53,13 @@ function App() {
       {/* Footer section (hidden on map route for full immersion) */}
       <Routes>
         <Route path="/" element={
-          <footer className="bg-white border-t-2 border-gray-300 mt-auto shrink-0">
+          <footer className="bg-white border-t border-slate-200 mt-auto shrink-0 z-50">
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-              <p className="text-center text-base font-semibold text-gray-600">
+              <p className="text-center text-base font-semibold text-slate-600">
                 &copy; {new Date().getFullYear()} CarePilot Humanitarian Initiative. All rights reserved.
+              </p>
+              <p className="text-center text-sm text-slate-500 mt-2 font-medium">
+                Data sourced from Kenya Master Health Facility List (KMHFL). A project for universal health accessibility.
               </p>
             </div>
           </footer>
